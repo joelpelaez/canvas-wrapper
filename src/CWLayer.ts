@@ -21,8 +21,6 @@ class CWLayer extends CWElement {
     canvas.ondblclick = ev => this.onDoubleClick(ev);
     canvas.onmousedown = ev => this.onMouseDown(ev);
     canvas.onmousemove = ev => this.onMouseMove(ev);
-    //canvas.onmousemove = ev => this.onMouseOut(ev);
-    //canvas.onmousemove = ev => this.onMouseOver(ev);
     canvas.onmouseup = ev => this.onMouseUp(ev);
     canvas.onwheel = ev => this.onWheel(ev);
   }
@@ -119,10 +117,14 @@ class CWLayer extends CWElement {
 
   invalidate() {
     // This calls to render()
-    this.render();
+    this.realRender();
   }
 
   public render() {
+    requestAnimationFrame(this.realRender)
+  }
+
+  public realRender() {
     const ctx = this.context;
 
     // Prepare elements by priority
