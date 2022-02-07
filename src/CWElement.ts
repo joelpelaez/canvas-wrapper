@@ -52,7 +52,7 @@ abstract class CWElement {
     this._priority = value;
   }
 
-  protected constructor(private parent: CWElement) {
+  protected constructor(protected parent: CWElement) {
     this._children = [];
     this._x = 0;
     this._y = 0;
