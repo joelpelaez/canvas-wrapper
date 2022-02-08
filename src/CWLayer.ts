@@ -6,14 +6,33 @@ import {
   isOnMouseUpCallback, isOnWheelCallback
 } from './EventCallbackCheckers';
 
+function resizeCanvasToDisplaySize(canvas) {
+  // Lookup the size the browser is displaying the canvas in CSS pixels.
+  const displayWidth  = canvas.clientWidth;
+  const displayHeight = canvas.clientHeight;
+
+  // Check if the canvas is not the same size.
+  const needResize = canvas.width  !== displayWidth ||
+    canvas.height !== displayHeight;
+
+  if (needResize) {
+    // Make the canvas the same size
+    canvas.width  = displayWidth;
+    canvas.height = displayHeight;
+  }
+
+  return needResize;
+}
+
 class CWLayer extends CWElement {
-  private readonly context: CanvasRenderingContext2D;
+  private context: CanvasRenderingContext2D;
   private mouseEventsElements: CWElement[];
 
   constructor(private canvas: HTMLCanvasElement) {
     // Only CWLayer has null parent
     super(null);
 
+    resizeCanvasToDisplaySize(canvas);
     this.context = canvas.getContext("2d");
     this.width = canvas.getBoundingClientRect().width;
     this.height = canvas.getBoundingClientRect().height;
@@ -26,6 +45,22 @@ class CWLayer extends CWElement {
     canvas.onmousemove = ev => this.onMouseMove(ev);
     canvas.onmouseup = ev => this.onMouseUp(ev);
     canvas.onwheel = ev => this.onWheel(ev);
+
+    window.addEventListener('resize', ev => this.onResize(ev), false);
+  }
+
+  onResize(event: UIEvent) {
+    console.log(event);
+    this.processResize();
+  }
+
+  processResize() {
+    if (resizeCanvasToDisplaySize(this.canvas)) {
+      this.context = this.canvas.getContext("2d");
+      this.width = this.canvas.getBoundingClientRect().width;
+      this.height = this.canvas.getBoundingClientRect().height;
+      this.invalidate();
+    }
   }
 
   onClick(event: MouseEvent) {
@@ -125,7 +160,7 @@ class CWLayer extends CWElement {
 
   invalidate() {
     // This calls to render()
-    this.realRender();
+    this.render();
   }
 
   public render() {
@@ -147,6 +182,10 @@ class CWLayer extends CWElement {
 
       return 0;
     })
+
+    for (const element of toRender) {
+      element.prePaint();
+    }
 
     // Clear all
     ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
