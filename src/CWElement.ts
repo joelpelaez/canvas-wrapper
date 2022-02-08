@@ -91,6 +91,8 @@ abstract class CWElement {
     this.parent.invalidate();
   }
 
+  abstract prePaint();
+
   abstract paint(context: CanvasRenderingContext2D, rx: ((r: number) => number), ry: ((r: number) => number));
 }
 

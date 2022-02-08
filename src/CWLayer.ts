@@ -114,6 +114,11 @@ class CWLayer extends CWElement {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  prePaint() {
+    // dummy, rendering is managed by other way.
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   paint(context: CanvasRenderingContext2D, rx: ((r: number) => number), ry: ((r: number) => number)) {
     // dummy, rendering is managed by other way.
   }
