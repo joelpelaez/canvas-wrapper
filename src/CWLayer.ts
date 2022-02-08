@@ -15,6 +15,9 @@ class CWLayer extends CWElement {
     super(null);
 
     this.context = canvas.getContext("2d");
+    this.width = canvas.getBoundingClientRect().width;
+    this.height = canvas.getBoundingClientRect().height;
+    
     this.mouseEventsElements = [];
 
     canvas.onclick = ev => this.onClick(ev);
