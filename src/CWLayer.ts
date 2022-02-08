@@ -124,7 +124,7 @@ class CWLayer extends CWElement {
   }
 
   public render() {
-    requestAnimationFrame(this.realRender)
+    requestAnimationFrame(this.realRender.bind(this));
   }
 
   public realRender() {
